@@ -1,0 +1,69 @@
+service: ViNCnT-DB
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: ap-southeast-2
+
+resources:
+  Resources:
+    UsersDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: Email
+            AttributeType: S
+        KeySchema:
+          - AttributeName: Email
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: "${self:service}-users-${opt:stage, self:provider.stage}"
+    VotesDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: Session
+            AttributeType: N
+          - AttributeName: Email
+            AttributeType: S
+        KeySchema:
+          - AttributeName: Session
+            KeyType: HASH
+          - AttributeName: Email
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: "${self:service}-votes-${opt:stage, self:provider.stage}"
+    RestaurantsDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: N
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: "${self:service}-restaurants-${opt:stage, self:provider.stage}"
+    SessionsDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: N
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: "${self:service}-sessions-${opt:stage, self:provider.stage}"

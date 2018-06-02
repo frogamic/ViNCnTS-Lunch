@@ -1,0 +1,58 @@
+service: ViNCnT
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: ap-southeast-2
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "DynamoDB:Query"
+        - "DynamoDB:Scan"
+        - "DynamoDB:GetItem"
+        - "DynamoDB:PutItem"
+        - "DynamoDB:UpdateItem"
+        - "DynamoDB:DeleteItem"
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${file(./db/serverless.yml):service}-*-${opt:stage, self:provider.stage}"
+  environment:
+    DYNAMODB_USERS: "${file(./db/serverless.yml):service}-users-${opt:stage, self:provider.stage}"
+    DYNAMODB_VOTES: "${file(./db/serverless.yml):service}-votes-${opt:stage, self:provider.stage}"
+    DYNAMODB_SESSIONS: "${file(./db/serverless.yml):service}-sessions-${opt:stage, self:provider.stage}"
+    DYNAMODB_RESTAURANTS: "${file(./db/serverless.yml):service}-restaurants-${opt:stage, self:provider.stage}"
+
+functions:
+  get:
+    handler: api/handler.get
+    events:
+      - http:
+          path: '{endpoint}/{id}'
+          method: get
+          cors: true
+  delete:
+    handler: api/handler.delete
+    events:
+      - http:
+          path: '{endpoint}/{id}'
+          method: delete
+          cors: true
+  update:
+    handler: api/handler.update
+    events:
+      - http:
+          path: '{endpoint}/{id}'
+          method: put
+          cors: true
+  create:
+    handler: api/handler.create
+    events:
+      - http:
+          path: '{endpoint}'
+          method: post
+          cors: true
+  list:
+    handler: api/handler.list
+    events:
+      - http:
+          path: '{endpoint}'
+          method: get
+          cors: true
