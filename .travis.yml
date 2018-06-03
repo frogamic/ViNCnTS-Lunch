@@ -1,4 +1,5 @@
 language: node_js
-node_js: 8.10
-install: 'cd ./api && npm install'
-script: 'cd ./api && npm test'
+node_js: '8.10'
+before_install: 'cd ./api'
+install: 'npm install'
+script: 'npm test'
