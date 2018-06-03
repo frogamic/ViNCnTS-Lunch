@@ -5,4 +5,14 @@ install: 'npm install'
 script: 'npm run coverage'
 after_success: 'cat ./coverage/lcov.info | ./node_modules/.bin/coveralls && rm -rf ./coverage'
 before_deploy: npm install -g serverless
-deploy: sls deploy
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: sls deploy
+    on:
+      branch: master
+  - provider: script
+    skip_cleanup: true
+    script: sls deploy --stage prod
+    on:
+      branch: deploy
