@@ -1,20 +1,90 @@
 'use strict';
 
-module.exports.get = (event, context, callback) => {
-  const response = {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: 'Go Serverless v1.0! Your function executed successfully!',
-      input: event,
-    }),
-  };
+const aws = require('aws-sdk');
 
-  callback(null, response);
-
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // callback(null, { message: 'Go Serverless v1.0! Your function executed successfully!', event });
+const validParams = {
+    restaurants: {
+        location: 'string',
+        cuisine: 'string',
+        website: 'string',
+    },
+    users: {
+        email: 'string',
+        drives: 'boolean',
+    },
+    votes: {
+        session: 'number',
+        user: 'string',
+        cuisine: 'string',
+        location: 'string',
+        restaurant: 'number',
+    },
+    sessions: {
+        drivers: 'object',
+        votes: 'object',
+        wingmen: 'object',
+        state: 'string',
+    },
 };
-module.exports.list = module.exports.get;
-module.exports.create = module.exports.get;
-module.exports.update = module.exports.get;
-module.exports.delete = module.exports.get;
+
+const throwErr = (statusCode, message) => {
+    console.log(message);
+    throw {statusCode, body: JSON.stringify({message})};
+};
+
+const isValidEndpoint = (endpoint) => {
+    if (endpoint in validParams) {
+        return true;
+    } else {
+        throwErr(404, "Endpoint not found");
+    }
+};
+
+const isValidRequest = (endpoint, input) => {
+    if (input !== undefined && Object.keys(input).length > 0 && Object.keys(input).every(
+        (key) => {
+            if (typeof input[key] === validParams[endpoint][key]) {
+                return true;
+            } else {
+                throwErr(400, `Invalid request: ${key} should be of type ${validParams[endpoint][key]}`);
+            }
+        }
+    )) {
+        return true;
+    } else {
+        throwErr(400, "Request must include a body");
+    }
+};
+
+const hasID = (event) => {
+    if (event.pathParameters.id !== undefined) {
+        return true;
+    } else {
+        throwErr(400, 'No ID specified');
+    }
+}
+
+const checkValid = (event, callback) => {
+    try {
+        return isValidEndpoint(event.pathParameters.endpoint)
+            && (event.httpMethod === 'GET' || event.httpMethod === 'DELETE' || isValidRequest(event.pathParameters.endpoint, event.body))
+            && (event.httpMethod === 'GET' || event.httpMethod === 'POST' || hasID(event));
+    } catch (e) {
+        callback(null, e);
+    }
+    return false;
+};
+
+module.exports.handler = (event, context, callback) => {
+    if (checkValid(event, callback)) {
+        let response = {
+            statusCode: 200,
+            body: JSON.stringify({
+                message: `Go Serverless v1.0! Your ${event.httpMethod} executed successfully!`,
+                input: event,
+            }),
+        };
+
+        callback(null, response);
+    }
+};

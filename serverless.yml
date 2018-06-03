@@ -29,37 +29,25 @@ package:
     - '!api/node_modules/**'
 
 functions:
-  get:
-    handler: api/handler.get
+  handler:
+    handler: api/handler.handler
     events:
       - http:
           path: '{endpoint}/{id}'
           method: get
           cors: true
-  delete:
-    handler: api/handler.delete
-    events:
       - http:
           path: '{endpoint}/{id}'
           method: delete
           cors: true
-  update:
-    handler: api/handler.update
-    events:
       - http:
           path: '{endpoint}/{id}'
           method: put
           cors: true
-  create:
-    handler: api/handler.create
-    events:
       - http:
           path: '{endpoint}'
           method: post
           cors: true
-  list:
-    handler: api/handler.list
-    events:
       - http:
           path: '{endpoint}'
           method: get
