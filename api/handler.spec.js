@@ -111,7 +111,6 @@ describe('/users endpoint', () => {
 
 });
 
-
 describe('/restaurants endpoint', () => {
     const endpoint = 'restaurants';
 
@@ -139,8 +138,8 @@ describe('/restaurants endpoint', () => {
             httpMethod: 'POST',
             pathParameters: { endpoint },
             body: {
-                location: 'Spitfire Square',
-                cuisine: 'sushi',
+                locations: ['Spitfire Square'],
+                cuisines: ['sushi', 'japanese'],
                 website: 'goodsushi.co.nz',
                 name: 'Good Sushi'
             }
@@ -156,7 +155,7 @@ describe('/restaurants endpoint', () => {
                 id: '1234'
             },
             body: {
-                location: 'Spitfire Square',
+                locations: ['Spitfire Square', 'Wairakei Shops'],
                 website: 'food.com'
             }
         };
@@ -206,6 +205,97 @@ describe('/restaurants endpoint', () => {
 
 });
 
+describe('/locations endpoint', () => {
+    const endpoint = 'locations';
+
+    test('GET without id', (done) => {
+        const event = {
+            httpMethod: 'GET',
+            pathParameters: { endpoint }
+        };
+        handler.handler(event, undefined, generateStatusCallback(done, 200));
+    });
+
+    test('GET with id returns 200', (done) => {
+        const event = {
+            httpMethod: 'GET',
+            pathParameters: {
+                endpoint,
+                id: '1234'
+            }
+        };
+        handler.handler(event, undefined, generateStatusCallback(done, 200));
+    });
+
+    test('POST without id, with valid parameters returns 200', (done) => {
+        const event = {
+            httpMethod: 'POST',
+            pathParameters: { endpoint },
+            body: {
+                city: 'Christchurch',
+                coordinates: '101e300.5n',
+                name: 'Spitfire Square'
+            }
+        };
+        handler.handler(event, undefined, generateStatusCallback(done, 200));
+    });
+
+    test('PUT with id, with valid parameters returns 200', (done) => {
+        const event = {
+            httpMethod: 'PUT',
+            pathParameters: {
+                endpoint,
+                id: '1234'
+            },
+            body: {
+                city: 'Auckland'
+            }
+        };
+        handler.handler(event, undefined, generateStatusCallback(done, 200));
+    });
+
+    test('DELETE with id returns 200', (done) => {
+        const event = {
+            httpMethod: 'DELETE',
+            pathParameters: {
+                endpoint,
+                id: '123'
+            }
+        };
+        handler.handler(event, undefined, generateStatusCallback(done, 200));
+    });
+
+    test('PUT with body without id returns 400', (done) => {
+        const event = {
+            httpMethod: 'PUT',
+            pathParameters: { endpoint },
+            body: {
+                city: 'Melbourne'
+            }
+        };
+        handler.handler(event, undefined, generateStatusCallback(done, 400));
+    });
+
+    test('POST without body without id returns 400', (done) => {
+        const event = {
+            httpMethod: 'POST',
+            pathParameters: { endpoint }
+        };
+        handler.handler(event, undefined, generateStatusCallback(done, 400));
+    });
+
+    test('POST with body with invalid key without id returns 400', (done) => {
+        const event = {
+            httpMethod: 'POST',
+            pathParameters: { endpoint },
+            body: {
+                id: 'fred@email.com'
+            }
+        };
+        handler.handler(event, undefined, generateStatusCallback(done, 400));
+    });
+
+});
 
 describe('/votes endpoint', () => {
     const endpoint = 'votes';
@@ -300,7 +390,6 @@ describe('/votes endpoint', () => {
 
 });
 
-
 describe('/sessions endpoint', () => {
     const endpoint = 'sessions';
 
@@ -329,8 +418,7 @@ describe('/sessions endpoint', () => {
             pathParameters: { endpoint },
             body: {
                 drivers: ['someone@example.com'],
-                state: 'open',
-                votes: ['someone@example.com']
+                state: 'open'
             }
         };
         handler.handler(event, undefined, generateStatusCallback(done, 200));

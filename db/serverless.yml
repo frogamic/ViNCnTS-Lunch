@@ -7,6 +7,24 @@ provider:
 
 resources:
   Resources:
+    LocationsDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: City
+            AttributeType: S
+          - AttributeName: Name
+            AttributeType: S
+        KeySchema:
+          - AttributeName: City
+            KeyType: HASH
+          - AttributeName: Name
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: "${self:service}-locations-${opt:stage, self:provider.stage}"
     UsersDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: Retain
@@ -44,10 +62,10 @@ resources:
       DeletionPolicy: Retain
       Properties:
         AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: N
+          - AttributeName: Name
+            AttributeType: S
         KeySchema:
-          - AttributeName: id
+          - AttributeName: Name
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1

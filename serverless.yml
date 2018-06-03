@@ -19,6 +19,7 @@ provider:
     DYNAMODB_VOTES: "${file(./db/serverless.yml):service}-votes-${opt:stage, self:provider.stage}"
     DYNAMODB_SESSIONS: "${file(./db/serverless.yml):service}-sessions-${opt:stage, self:provider.stage}"
     DYNAMODB_RESTAURANTS: "${file(./db/serverless.yml):service}-restaurants-${opt:stage, self:provider.stage}"
+    DYNAMODB_LOCATIONS: "${file(./db/serverless.yml):service}-locations-${opt:stage, self:provider.stage}"
 
 package:
   exclude:

@@ -1,28 +1,35 @@
 'use strict';
 
 const validParams = {
+    locations: {
+        name: 'string',
+        coordinates: 'string',
+        city: 'string'
+    },
     restaurants: {
-        location: 'string',
-        cuisine: 'string',
+        locations: 'object',
+        cuisines: 'object',
         website: 'string',
+        menuUri: 'string',
         name: 'string'
     },
     users: {
         email: 'string',
         drives: 'boolean',
+        city: 'string'
     },
     votes: {
         session: 'number',
         user: 'string',
         cuisine: 'string',
-        location: 'string',
-        restaurant: 'number',
+        restaurant: 'number'
     },
     sessions: {
+        office: 'string',
         drivers: 'object',
-        votes: 'object',
         wingmen: 'object',
         state: 'string',
+        endTime: 'string'
     },
 };
 
