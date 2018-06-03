@@ -26,6 +26,8 @@ package:
     - ./**
   include:
     - api/**
+    - '!api/.**'
+    - '!api/coverage/**'
     - '!api/node_modules/**'
     - '!api/*.spec.js'
 

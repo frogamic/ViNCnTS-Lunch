@@ -1,18 +1,22 @@
 language: node_js
 node_js: '8.10'
+cache:
+  directories:
+    - node_modules
+    - api/node_modules
 before_install: 'cd ./api'
 install: 'npm install'
 script: 'npm run coverage'
 after_success: 'cat ./coverage/lcov.info | ./node_modules/.bin/coveralls && rm -rf ./coverage'
-before_deploy: cd .. && npm install -g serverless
+before_deploy: cd .. && npm install
 deploy:
   - provider: script
     skip_cleanup: true
-    script: sls deploy
+    script: ./node_modules/.bin/serverless deploy
     on:
       branch: master
   - provider: script
     skip_cleanup: true
-    script: sls deploy --stage prod
+    script: ./node_modules/.bin/serverless deploy --stage prod
     on:
       branch: deploy

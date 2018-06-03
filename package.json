@@ -1,0 +1,21 @@
+{
+  "name": "vincnt",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "test": "cd api && npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frogamic/ViNCnTS-Lunch.git"
+  },
+  "author": "Dominic Shelton",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/frogamic/ViNCnTS-Lunch/issues"
+  },
+  "homepage": "https://github.com/frogamic/ViNCnTS-Lunch#readme",
+  "devDependencies": {
+    "serverless": "1.27.3"
+  }
+}
