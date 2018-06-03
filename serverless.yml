@@ -20,6 +20,14 @@ provider:
     DYNAMODB_SESSIONS: "${file(./db/serverless.yml):service}-sessions-${opt:stage, self:provider.stage}"
     DYNAMODB_RESTAURANTS: "${file(./db/serverless.yml):service}-restaurants-${opt:stage, self:provider.stage}"
 
+package:
+  exclude:
+    - ./**
+    - api/node_modules/**
+  include:
+    - api/**
+    - '!api/node_modules/**'
+
 functions:
   get:
     handler: api/handler.get

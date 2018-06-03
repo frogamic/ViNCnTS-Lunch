@@ -1,0 +1,26 @@
+{
+  "name": "vincnt-api",
+  "version": "0.0.1",
+  "description": "Visual Negotiation and Consensus Tool for Simplifying Lunch API backend",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frogamic/ViNCnTS-Lunch.git"
+  },
+  "author": "Dominic Shelton",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/frogamic/ViNCnTS-Lunch/issues"
+  },
+  "homepage": "https://github.com/frogamic/ViNCnTS-Lunch#readme",
+  "dependencies": {
+    "aws-sdk": "2.250.1"
+  },
+  "devDependencies": {
+    "aws-sdk-mock": "^2.0.0",
+    "jest": "^23.1.0"
+  }
+}
