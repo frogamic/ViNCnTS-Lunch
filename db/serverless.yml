@@ -3,13 +3,19 @@ service: ViNCnT-DB
 provider:
   name: aws
   runtime: nodejs8.10
-  region: ap-southeast-2
+  region: ${file(../serverless.yml):provider.region}
+
+custom:
+  dev:
+    deletionPolicy: Delete
+  prod:
+    deletionPolicy: Retain
 
 resources:
   Resources:
     LocationsDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Retain
+      DeletionPolicy: ${self:custom.${opt:stage, self:provider.stage}.deletionPolicy}
       Properties:
         AttributeDefinitions:
           - AttributeName: City
@@ -27,7 +33,7 @@ resources:
         TableName: "${self:service}-locations-${opt:stage, self:provider.stage}"
     UsersDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Retain
+      DeletionPolicy: ${self:custom.${opt:stage, self:provider.stage}.deletionPolicy}
       Properties:
         AttributeDefinitions:
           - AttributeName: Email
@@ -41,11 +47,11 @@ resources:
         TableName: "${self:service}-users-${opt:stage, self:provider.stage}"
     VotesDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Retain
+      DeletionPolicy: ${self:custom.${opt:stage, self:provider.stage}.deletionPolicy}
       Properties:
         AttributeDefinitions:
           - AttributeName: Session
-            AttributeType: N
+            AttributeType: S
           - AttributeName: Email
             AttributeType: S
         KeySchema:
@@ -59,7 +65,7 @@ resources:
         TableName: "${self:service}-votes-${opt:stage, self:provider.stage}"
     RestaurantsDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Retain
+      DeletionPolicy: ${self:custom.${opt:stage, self:provider.stage}.deletionPolicy}
       Properties:
         AttributeDefinitions:
           - AttributeName: Name
@@ -73,14 +79,18 @@ resources:
         TableName: "${self:service}-restaurants-${opt:stage, self:provider.stage}"
     SessionsDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Retain
+      DeletionPolicy: ${self:custom.${opt:stage, self:provider.stage}.deletionPolicy}
       Properties:
         AttributeDefinitions:
+          - AttributeName: City
+            AttributeType: S
           - AttributeName: id
-            AttributeType: N
+            AttributeType: S
         KeySchema:
-          - AttributeName: id
+          - AttributeName: City
             KeyType: HASH
+          - AttributeName: id
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
