@@ -38,17 +38,15 @@ const isValidEndpoint = (endpoint) => {
     }
 };
 
-const isValidRequest = (endpoint, input) => {
+const isValidPayload = (endpoint, input) => {
     if (input !== undefined && Object.keys(input).length > 0 && Object.keys(input).every(
         (key) => {
             if (typeof input[key] === validParams[endpoint][key]) {
                 return true;
-            } else {
-                if (validParams[endpoint][key]) {
-                    throwErr(400, `Invalid request: ${key} should be of type ${validParams[endpoint][key]}`);
-                } else{
-                    throwErr(400, `Invalid request: ${key} is not a valid key`);
-                }
+            } else if (validParams[endpoint][key] === undefined) {
+                throwErr(400, `Invalid request: ${key} is not a valid key`);
+            } else{
+                throwErr(400, `Invalid request: ${key} should be of type ${validParams[endpoint][key]}`);
             }
         }
     )) {
@@ -69,7 +67,7 @@ const hasID = (event) => {
 const checkValid = (event, callback) => {
     try {
         return isValidEndpoint(event.pathParameters.endpoint)
-            && (event.httpMethod === 'GET' || event.httpMethod === 'DELETE' || isValidRequest(event.pathParameters.endpoint, event.body))
+            && (event.httpMethod === 'GET' || event.httpMethod === 'DELETE' || isValidPayload(event.pathParameters.endpoint, event.body))
             && (event.httpMethod === 'GET' || event.httpMethod === 'POST' || hasID(event));
     } catch (e) {
         callback(null, e);

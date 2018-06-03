@@ -98,6 +98,17 @@ describe('/users endpoint', () => {
         handler.handler(event, undefined, generateStatusCallback(done, 400));
     });
 
+    test('POST with body with invalid datatype without id returns 400', (done) => {
+        const event = {
+            httpMethod: 'POST',
+            pathParameters: { endpoint },
+            body: {
+                email: 74
+            }
+        };
+        handler.handler(event, undefined, generateStatusCallback(done, 400));
+    });
+
 });
 
 
