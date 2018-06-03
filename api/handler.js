@@ -1,12 +1,11 @@
 'use strict';
 
-const aws = require('aws-sdk');
-
 const validParams = {
     restaurants: {
         location: 'string',
         cuisine: 'string',
         website: 'string',
+        name: 'string'
     },
     users: {
         email: 'string',
@@ -28,7 +27,6 @@ const validParams = {
 };
 
 const throwErr = (statusCode, message) => {
-    console.log(message);
     throw {statusCode, body: JSON.stringify({message})};
 };
 
@@ -36,7 +34,7 @@ const isValidEndpoint = (endpoint) => {
     if (endpoint in validParams) {
         return true;
     } else {
-        throwErr(404, "Endpoint not found");
+        throwErr(404, 'Endpoint not found');
     }
 };
 
@@ -46,13 +44,17 @@ const isValidRequest = (endpoint, input) => {
             if (typeof input[key] === validParams[endpoint][key]) {
                 return true;
             } else {
-                throwErr(400, `Invalid request: ${key} should be of type ${validParams[endpoint][key]}`);
+                if (validParams[endpoint][key]) {
+                    throwErr(400, `Invalid request: ${key} should be of type ${validParams[endpoint][key]}`);
+                } else{
+                    throwErr(400, `Invalid request: ${key} is not a valid key`);
+                }
             }
         }
     )) {
         return true;
     } else {
-        throwErr(400, "Request must include a body");
+        throwErr(400, 'Request must include a body');
     }
 };
 
@@ -62,7 +64,7 @@ const hasID = (event) => {
     } else {
         throwErr(400, 'No ID specified');
     }
-}
+};
 
 const checkValid = (event, callback) => {
     try {

@@ -23,10 +23,10 @@ provider:
 package:
   exclude:
     - ./**
-    - api/node_modules/**
   include:
     - api/**
     - '!api/node_modules/**'
+    - '!api/*.spec.js'
 
 functions:
   handler:
