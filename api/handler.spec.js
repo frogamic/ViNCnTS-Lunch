@@ -1,25 +1,18 @@
 'use strict';
 const handler = require('./handler');
 
-const generateStatusCallback = (done, expectedStatusCode) => {
-    return (_, result) => {
-        expect(result).toHaveProperty('statusCode', expectedStatusCode);
-        done();
-    };
-};
-
 describe('/users endpoint', () => {
     const endpoint = 'users';
 
-    test('GET without id', (done) => {
+    test('GET without id', async () => {
         const event = {
             httpMethod: 'GET',
             pathParameters: { endpoint }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('GET with id returns 200', (done) => {
+    test('GET with id returns 200', async () => {
         const event = {
             httpMethod: 'GET',
             pathParameters: {
@@ -27,10 +20,10 @@ describe('/users endpoint', () => {
                 id: '1234'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('POST without id, with valid parameters returns 200', (done) => {
+    test('POST without id, with valid parameters returns 200', async () => {
         const event = {
             httpMethod: 'POST',
             pathParameters: { endpoint },
@@ -39,10 +32,10 @@ describe('/users endpoint', () => {
                 drives: true
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('PUT with id, with valid parameters returns 200', (done) => {
+    test('PUT with id, with valid parameters returns 200', async () => {
         const event = {
             httpMethod: 'PUT',
             pathParameters: {
@@ -54,10 +47,10 @@ describe('/users endpoint', () => {
                 drives: true
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('DELETE with id returns 200', (done) => {
+    test('DELETE with id returns 200', async () => {
         const event = {
             httpMethod: 'DELETE',
             pathParameters: {
@@ -65,10 +58,10 @@ describe('/users endpoint', () => {
                 id: '123'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('PUT with body without id returns 400', (done) => {
+    test('PUT with body without id returns 400', async () => {
         const event = {
             httpMethod: 'PUT',
             pathParameters: { endpoint },
@@ -76,18 +69,18 @@ describe('/users endpoint', () => {
                 email: 'fred@email.com'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 400));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 400);
     });
 
-    test('POST without body without id returns 400', (done) => {
+    test('POST without body without id returns 400', async () => {
         const event = {
             httpMethod: 'POST',
             pathParameters: { endpoint }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 400));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 400);
     });
 
-    test('POST with body with invalid key without id returns 400', (done) => {
+    test('POST with body with invalid key without id returns 400', async () => {
         const event = {
             httpMethod: 'POST',
             pathParameters: { endpoint },
@@ -95,10 +88,10 @@ describe('/users endpoint', () => {
                 id: 'fred@email.com'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 400));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 400);
     });
 
-    test('POST with body with invalid datatype without id returns 400', (done) => {
+    test('POST with body with invalid datatype without id returns 400', async () => {
         const event = {
             httpMethod: 'POST',
             pathParameters: { endpoint },
@@ -106,7 +99,7 @@ describe('/users endpoint', () => {
                 email: 74
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 400));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 400);
     });
 
 });
@@ -114,15 +107,15 @@ describe('/users endpoint', () => {
 describe('/restaurants endpoint', () => {
     const endpoint = 'restaurants';
 
-    test('GET without id', (done) => {
+    test('GET without id', async () => {
         const event = {
             httpMethod: 'GET',
             pathParameters: { endpoint }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('GET with id returns 200', (done) => {
+    test('GET with id returns 200', async () => {
         const event = {
             httpMethod: 'GET',
             pathParameters: {
@@ -130,10 +123,10 @@ describe('/restaurants endpoint', () => {
                 id: '1234'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('POST without id, with valid parameters returns 200', (done) => {
+    test('POST without id, with valid parameters returns 200', async () => {
         const event = {
             httpMethod: 'POST',
             pathParameters: { endpoint },
@@ -144,10 +137,10 @@ describe('/restaurants endpoint', () => {
                 name: 'Good Sushi'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('PUT with id, with valid parameters returns 200', (done) => {
+    test('PUT with id, with valid parameters returns 200', async () => {
         const event = {
             httpMethod: 'PUT',
             pathParameters: {
@@ -159,10 +152,10 @@ describe('/restaurants endpoint', () => {
                 website: 'food.com'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('DELETE with id returns 200', (done) => {
+    test('DELETE with id returns 200', async () => {
         const event = {
             httpMethod: 'DELETE',
             pathParameters: {
@@ -170,10 +163,10 @@ describe('/restaurants endpoint', () => {
                 id: '123'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('PUT with body without id returns 400', (done) => {
+    test('PUT with body without id returns 400', async () => {
         const event = {
             httpMethod: 'PUT',
             pathParameters: { endpoint },
@@ -181,18 +174,18 @@ describe('/restaurants endpoint', () => {
                 email: 'fred@email.com'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 400));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 400);
     });
 
-    test('POST without body without id returns 400', (done) => {
+    test('POST without body without id returns 400', async () => {
         const event = {
             httpMethod: 'POST',
             pathParameters: { endpoint }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 400));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 400);
     });
 
-    test('POST with body with invalid key without id returns 400', (done) => {
+    test('POST with body with invalid key without id returns 400', async () => {
         const event = {
             httpMethod: 'POST',
             pathParameters: { endpoint },
@@ -200,7 +193,7 @@ describe('/restaurants endpoint', () => {
                 id: 'fred@email.com'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 400));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 400);
     });
 
 });
@@ -208,15 +201,15 @@ describe('/restaurants endpoint', () => {
 describe('/locations endpoint', () => {
     const endpoint = 'locations';
 
-    test('GET without id', (done) => {
+    test('GET without id', async () => {
         const event = {
             httpMethod: 'GET',
             pathParameters: { endpoint }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('GET with id returns 200', (done) => {
+    test('GET with id returns 200', async () => {
         const event = {
             httpMethod: 'GET',
             pathParameters: {
@@ -224,10 +217,10 @@ describe('/locations endpoint', () => {
                 id: '1234'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('POST without id, with valid parameters returns 200', (done) => {
+    test('POST without id, with valid parameters returns 200', async () => {
         const event = {
             httpMethod: 'POST',
             pathParameters: { endpoint },
@@ -237,10 +230,10 @@ describe('/locations endpoint', () => {
                 name: 'Spitfire Square'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('PUT with id, with valid parameters returns 200', (done) => {
+    test('PUT with id, with valid parameters returns 200', async () => {
         const event = {
             httpMethod: 'PUT',
             pathParameters: {
@@ -251,10 +244,10 @@ describe('/locations endpoint', () => {
                 city: 'Auckland'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('DELETE with id returns 200', (done) => {
+    test('DELETE with id returns 200', async () => {
         const event = {
             httpMethod: 'DELETE',
             pathParameters: {
@@ -262,10 +255,10 @@ describe('/locations endpoint', () => {
                 id: '123'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('PUT with body without id returns 400', (done) => {
+    test('PUT with body without id returns 400', async () => {
         const event = {
             httpMethod: 'PUT',
             pathParameters: { endpoint },
@@ -273,18 +266,18 @@ describe('/locations endpoint', () => {
                 city: 'Melbourne'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 400));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 400);
     });
 
-    test('POST without body without id returns 400', (done) => {
+    test('POST without body without id returns 400', async () => {
         const event = {
             httpMethod: 'POST',
             pathParameters: { endpoint }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 400));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 400);
     });
 
-    test('POST with body with invalid key without id returns 400', (done) => {
+    test('POST with body with invalid key without id returns 400', async () => {
         const event = {
             httpMethod: 'POST',
             pathParameters: { endpoint },
@@ -292,7 +285,7 @@ describe('/locations endpoint', () => {
                 id: 'fred@email.com'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 400));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 400);
     });
 
 });
@@ -300,15 +293,15 @@ describe('/locations endpoint', () => {
 describe('/votes endpoint', () => {
     const endpoint = 'votes';
 
-    test('GET without id', (done) => {
+    test('GET without id', async () => {
         const event = {
             httpMethod: 'GET',
             pathParameters: { endpoint }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('GET with id returns 200', (done) => {
+    test('GET with id returns 200', async () => {
         const event = {
             httpMethod: 'GET',
             pathParameters: {
@@ -316,10 +309,10 @@ describe('/votes endpoint', () => {
                 id: '1234'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('POST without id, with valid parameters returns 200', (done) => {
+    test('POST without id, with valid parameters returns 200', async () => {
         const event = {
             httpMethod: 'POST',
             pathParameters: { endpoint },
@@ -329,10 +322,10 @@ describe('/votes endpoint', () => {
                 restaurant: 4123
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('PUT with id, with valid parameters returns 200', (done) => {
+    test('PUT with id, with valid parameters returns 200', async () => {
         const event = {
             httpMethod: 'PUT',
             pathParameters: {
@@ -344,10 +337,10 @@ describe('/votes endpoint', () => {
                 cuisine: 'Thai'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('DELETE with id returns 200', (done) => {
+    test('DELETE with id returns 200', async () => {
         const event = {
             httpMethod: 'DELETE',
             pathParameters: {
@@ -355,10 +348,10 @@ describe('/votes endpoint', () => {
                 id: '123'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('PUT with body without id returns 400', (done) => {
+    test('PUT with body without id returns 400', async () => {
         const event = {
             httpMethod: 'PUT',
             pathParameters: { endpoint },
@@ -366,18 +359,18 @@ describe('/votes endpoint', () => {
                 user: 'fred@email.com'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 400));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 400);
     });
 
-    test('POST without body without id returns 400', (done) => {
+    test('POST without body without id returns 400', async () => {
         const event = {
             httpMethod: 'POST',
             pathParameters: { endpoint }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 400));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 400);
     });
 
-    test('POST with body with invalid key without id returns 400', (done) => {
+    test('POST with body with invalid key without id returns 400', async () => {
         const event = {
             httpMethod: 'POST',
             pathParameters: { endpoint },
@@ -385,7 +378,7 @@ describe('/votes endpoint', () => {
                 id: 'fred@email.com'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 400));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 400);
     });
 
 });
@@ -393,15 +386,15 @@ describe('/votes endpoint', () => {
 describe('/sessions endpoint', () => {
     const endpoint = 'sessions';
 
-    test('GET without id', (done) => {
+    test('GET without id', async () => {
         const event = {
             httpMethod: 'GET',
             pathParameters: { endpoint }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('GET with id returns 200', (done) => {
+    test('GET with id returns 200', async () => {
         const event = {
             httpMethod: 'GET',
             pathParameters: {
@@ -409,10 +402,10 @@ describe('/sessions endpoint', () => {
                 id: '1234'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('POST without id, with valid parameters returns 200', (done) => {
+    test('POST without id, with valid parameters returns 200', async () => {
         const event = {
             httpMethod: 'POST',
             pathParameters: { endpoint },
@@ -421,10 +414,10 @@ describe('/sessions endpoint', () => {
                 state: 'open'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('PUT with id, with valid parameters returns 200', (done) => {
+    test('PUT with id, with valid parameters returns 200', async () => {
         const event = {
             httpMethod: 'PUT',
             pathParameters: {
@@ -436,10 +429,10 @@ describe('/sessions endpoint', () => {
                 wingmen: ['harold@itwhiz.net']
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('DELETE with id returns 200', (done) => {
+    test('DELETE with id returns 200', async () => {
         const event = {
             httpMethod: 'DELETE',
             pathParameters: {
@@ -447,10 +440,10 @@ describe('/sessions endpoint', () => {
                 id: '123'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 200));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 200);
     });
 
-    test('PUT with body without id returns 400', (done) => {
+    test('PUT with body without id returns 400', async () => {
         const event = {
             httpMethod: 'PUT',
             pathParameters: { endpoint },
@@ -458,18 +451,18 @@ describe('/sessions endpoint', () => {
                 id: 100
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 400));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 400);
     });
 
-    test('POST without body without id returns 400', (done) => {
+    test('POST without body without id returns 400', async () => {
         const event = {
             httpMethod: 'POST',
             pathParameters: { endpoint }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 400));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 400);
     });
 
-    test('POST with body with invalid key type without id returns 400', (done) => {
+    test('POST with body with invalid key type without id returns 400', async () => {
         const event = {
             httpMethod: 'POST',
             pathParameters: { endpoint },
@@ -477,24 +470,24 @@ describe('/sessions endpoint', () => {
                 id: 'boop'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 400));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 400);
     });
 
 });
 
 describe('Invalid endpoints', () => {
 
-    test('DELETE without id returns 404', (done) => {
+    test('DELETE without id returns 404', async () => {
         const event = {
             httpMethod: 'DELETE',
             pathParameters: {
                 endpoint: 'gobbldygook'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 404));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 404);
     });
 
-    test('DELETE with id returns 404', (done) => {
+    test('DELETE with id returns 404', async () => {
         const event = {
             httpMethod: 'DELETE',
             pathParameters: {
@@ -502,10 +495,10 @@ describe('Invalid endpoints', () => {
                 id: 'hello_world'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 404));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 404);
     });
 
-    test('POST without id with body returns 404', (done) => {
+    test('POST without id with body returns 404', async () => {
         const event = {
             httpMethod: 'POST',
             pathParameters: {
@@ -516,10 +509,10 @@ describe('Invalid endpoints', () => {
                 num: 123
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 404));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 404);
     });
 
-    test('PUT with id with body returns 404', (done) => {
+    test('PUT with id with body returns 404', async () => {
         const event = {
             httpMethod: 'PUT',
             pathParameters: {
@@ -531,10 +524,10 @@ describe('Invalid endpoints', () => {
                 num: 123
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 404));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 404);
     });
 
-    test('PUT with id without body returns 404', (done) => {
+    test('PUT with id without body returns 404', async () => {
         const event = {
             httpMethod: 'PUT',
             pathParameters: {
@@ -542,7 +535,7 @@ describe('Invalid endpoints', () => {
                 id: 'hello_world'
             }
         };
-        handler.handler(event, undefined, generateStatusCallback(done, 404));
+        return expect(await handler.handler(event)).toHaveProperty('statusCode', 404);
     });
 
 });

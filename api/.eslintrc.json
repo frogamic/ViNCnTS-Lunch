@@ -5,6 +5,9 @@
         "node": true,
         "jest/globals": true
     },
+    "parserOptions": {
+        "ecmaVersion": 2017
+    },
     "extends": ["eslint:recommended", "plugin:jest/recommended"],
     "rules": {
         "indent": [

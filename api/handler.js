@@ -1,5 +1,7 @@
 'use strict';
 
+const aws = require('aws-sdk');
+
 const validParams = {
     locations: {
         name: 'string',
@@ -71,19 +73,23 @@ const hasID = (event) => {
     }
 };
 
-const checkValid = (event, callback) => {
-    try {
-        return isValidEndpoint(event.pathParameters.endpoint)
-            && (event.httpMethod === 'GET' || event.httpMethod === 'DELETE' || isValidPayload(event.pathParameters.endpoint, event.body))
-            && (event.httpMethod === 'GET' || event.httpMethod === 'POST' || hasID(event));
-    } catch (e) {
-        callback(null, e);
-    }
-    return false;
+const checkValid = (event) => {
+    return new Promise((resolve, reject) => {
+        try {
+            resolve(isValidEndpoint(event.pathParameters.endpoint)
+                && (event.httpMethod === 'GET' || event.httpMethod === 'DELETE' || isValidPayload(event.pathParameters.endpoint, event.body))
+                && (event.httpMethod === 'GET' || event.httpMethod === 'POST' || hasID(event)));
+        } catch (e) {
+            reject(e);
+        }
+    });
 };
 
-module.exports.handler = (event, context, callback) => {
-    if (checkValid(event, callback)) {
+module.exports.handler = async (event) => {
+    return await checkValid(event).then(() => {
+
+        const db = new aws.DynamoDB.DocumentClient();
+
         let response = {
             statusCode: 200,
             body: JSON.stringify({
@@ -92,6 +98,8 @@ module.exports.handler = (event, context, callback) => {
             }),
         };
 
-        callback(null, response);
-    }
+        return response;
+    }).catch((e) => {
+        return e;
+    });
 };
