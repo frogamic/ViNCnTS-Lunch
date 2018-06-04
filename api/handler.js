@@ -1,6 +1,6 @@
 'use strict';
 
-const aws = require('aws-sdk');
+// const aws = require('aws-sdk');
 
 const validParams = {
     locations: {
@@ -88,7 +88,7 @@ const checkValid = (event) => {
 module.exports.handler = async (event) => {
     return await checkValid(event).then(() => {
 
-        const db = new aws.DynamoDB.DocumentClient();
+        // const db = new aws.DynamoDB.DocumentClient();
 
         let response = {
             statusCode: 200,

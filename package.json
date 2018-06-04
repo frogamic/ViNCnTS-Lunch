@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
-    "test": "cd api && npm test"
+    "test": "cd api && npm test",
+    "deploy": "serverless deploy",
+    "deploy-prod": "serverless deploy --stage prod"
   },
   "repository": {
     "type": "git",
